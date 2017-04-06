@@ -348,6 +348,11 @@ class PYROSIM:
 
 		index = 0
 
+		# This if function checks to see if the robot has 'Explodeded' and exits the loop
+		if ( dataFromSimulator == [] ):
+
+			return
+
 		while ( dataFromSimulator[index] != 'Done' ):
 
 			ID = int( dataFromSimulator[index] )

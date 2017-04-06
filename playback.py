@@ -1,12 +1,20 @@
 import pickle
 from individual import INDIVIDUAL
+from environments import  ENVIRONMENTS
 
-
-
-
+###### Load Picked Population ######
 f = open('robot.p', 'rb')
 best = pickle.load(f)
 f.close()
-print(best)
-best.Evaluate(hideSim=False)
-print(best.fitness)
+
+####### Create Environments ######
+envs = ENVIRONMENTS()
+
+best.p[0].fitness = 0
+
+for e in envs.envs:
+
+    best.p[0].Start_Evaluation(envs.envs[e], hideSim=False, startPaused=True)
+    best.p[0].Compute_Fitness()
+
+print(best.p[0].fitness)

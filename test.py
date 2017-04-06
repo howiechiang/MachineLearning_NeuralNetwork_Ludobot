@@ -1,24 +1,14 @@
-from pyrosim import PYROSIM
+from core01_HillClimber import *
+import numpy as np
 
-sim = PYROSIM(playBlind=False,playPaused=False,evalTime=1000)
 
-x = 0
-y = 0
-z = 0.05
+a = MatrixCreate(5, 5)
+a = MatrixRandomize(a, -1, 1)
+b = MatrixCreate(5, 5)
+b = MatrixRandomize(b)
 
-for level in range(0,20):
+print(a)
+print(b)
+print(a * b + np.logical_not(b))
 
-	sim.Send_Box(ID=level, x=x, y=y, z=z, length=0.1, width=0.1, height=0.1, r=1, g=1, b=1)
-
-	z = z + 0.1
-
-x = 0.1
-z = 0.05
-
-for level in range(20,40):
-
-        sim.Send_Box(ID=level, x=x, y=y, z=z, length=0.1, width=0.1, height=0.1, r=1, g=1, b=1)
-
-        z = z + 0.1
-
-sim.Start()
+#print(1.0*np.array(np.logical_not(b)))
