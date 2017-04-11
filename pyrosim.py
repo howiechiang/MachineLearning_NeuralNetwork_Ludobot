@@ -336,7 +336,10 @@ class PYROSIM:
 					index = index + 1	
 		f.close()
 
+
 		os.remove(str(self.fileName)+'.dat')
+
+		# os.remove(str(self.fileName) + '.dat')
 
 	def Collect_Sensor_Data(self,dataFromSimulator):
 
