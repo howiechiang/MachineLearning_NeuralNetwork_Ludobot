@@ -30,7 +30,7 @@ class ROBOT:
                           x=0, y= (c.L + c.L / 2), z=c.L + c.R,
                           length=c.L, radius=c.R,
                           r1=0, r2=1, r3=0,
-                          r=1,g=0, b=0)
+                          r=1, g=0, b=0)
 
         sim.Send_Cylinder(objectID=2,
                           x= (c.L + c.L / 2), y=0, z=c.L + c.R,
