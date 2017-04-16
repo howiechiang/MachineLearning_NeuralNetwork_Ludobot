@@ -7,6 +7,7 @@ import constants as c
 from core01_HillClimber import *
 from environments import ENVIRONMENTS
 
+
 import matplotlib.pyplot as plt
 import copy as cp
 import sys
@@ -18,9 +19,14 @@ import os.path
 # Script
 ########################################################################################################################
 
+###### Variables ######
+pickledPop = "robot.p"
+#cSurv = int(c.popSize * c.perElitist)
+cSurv = int(c.perElitist * c.popSize)
+
+###### required variables ######
 fits = []
 envs = ENVIRONMENTS()
-pickledPop = "robot.p"
 
 ###### Make a population ######
 parents = POPULATION( c.popSize )
@@ -30,23 +36,37 @@ parents.Initialize()
 if os.path.isfile(pickledPop):
 
     f = open(pickledPop, "rb")
-    parents.Copy_Best_From(pickle.load(f))
-    parents.p[0].fitness = 0
-    parents.p[0].ID = 0
+    parents.Copy_Best_From(pickle.load(f), cSurv)
     f.close()
 
 ###### Print out fitness of initial parent ######
-parents.Evaluate( envs, hideSim=True, startPaused=False )
+parents.Evaluate( envs, hideSim=True, startPaused=False , printFit=False )
 parents.Print()
 
 ###### Iterate over generations ######
 for g in range(0, c.numGens):
 
+    # Initialize Children and fill population
     children = POPULATION( c.popSize )
-    children.FillFrom( parents )
-    children.Evaluate( envs, hideSim=True, startPaused=False )
+
+    children.Copy_Best_From(parents, cSurv)
+
+    # Rapture chance
+    if random.random() < c.perRapture:
+
+        children.Rapture()
+        print('Rapture')
+
+    else:
+
+        # Simple collection evaluation
+        children.Collect_Children_From(parents, c.perCrossOver)
+
+    # Evaluate Children and replace parents
+    children.Evaluate( envs, hideSim=True, startPaused=False , printFit=False )
     parents.ReplaceWith( children )
 
+    # Debugging
     fits.append(parents.p[0].fitness)
     print(g, end=' ')
     parents.Print()
@@ -60,11 +80,10 @@ for e in envs.envs:
     parents.p[0].Compute_Fitness( printFit=True )
 
 ###### This pickles the best configuration ######
+for i in parents.p:
+    parents.p[i].ID = 0
+
 f = open("robot.p", "wb")
-
-parents.Print()
-
-parents.p[0].ID = 0
 pickle.dump(parents, f)
 f.close()
 

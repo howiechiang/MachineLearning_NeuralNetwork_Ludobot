@@ -4,7 +4,7 @@
 
 
 ###### Constants for Simulation ######
-evaluationTime = 5000
+evaluationTime = 1000
 
 
 ###### Constants for Robot ######
@@ -20,3 +20,11 @@ pi = 3.14256
 popSize = 10
 numGens = 50
 numEnvs = 4
+tau = 0.3
+
+
+###### Logistics of Children Generation ######
+perElitist = .1          # elitist percentage
+perCrossOver = .01        # percent chance to breed
+perRapture = .01      # percent chance to reset population
+sMutation = 0.3          # sigma of mutation

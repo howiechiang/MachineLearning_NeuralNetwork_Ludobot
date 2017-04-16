@@ -18,50 +18,38 @@ class INDIVIDUAL:
         self.genome = MatrixCreate(5, 8)
         self.genome = MatrixRandomize(self.genome, 1, -1)
         self.fitness = 0
+        self.stability = 0
 
+    def Evaluate( self, environment, hideSim=True, startPaused=False, printFalse=False ):
 
-    def Evaluate( self, hideSim=True, startPaused=False ):
+        self.Start_Evaluation(environment=environment, hideSim=hideSim, startPaused=startPaused)
+        self.Compute_Fitness( printFit=printFalse)
 
-        sim = PYROSIM( playPaused=startPaused, playBlind=hideSim, evalTime=c.evaluationTime )
-        robot = ROBOT( sim, self.genome )
-        sim.Start()
-
-        sim.Wait_To_Finish()
-
-        x = sim.Get_Sensor_Data(sensorID=4, s=0)
-        y = sim.Get_Sensor_Data(sensorID=4, s=1)
-        z = sim.Get_Sensor_Data(sensorID=4, s=2)
-
-        # self.sensorData_0 = sim.Get_Sensor_Data(sensorID=0)
-        # self.sensorData_1 = sim.Get_Sensor_Data(sensorID=1)
-        # self.sensorData_2 = sim.Get_Sensor_Data(sensorID=2)
-        # self.sensorData_3 = sim.Get_Sensor_Data(sensorID=3)
-        # self.sensorData_4 = sim.Get_Sensor_Data(sensorID=4)
-
-        # print(sim.Get_Sensor_Data(sensorID=4))
-
-        self.fitness = y[-1]
-        del sim
-
-    def Mutate( self ):
+    def Mutate( self , s = c.sMutation):
 
         # This will choose a random gene to mutate. but this is based on a Gauss distribution. This has been edited to
         # accept 2 dimensional genes
         x = random.randint(0, len(self.genome) - 1 )
         y = random.randint(0, len(self.genome[0]) - 1 )
-        self.genome[x, y] = random.gauss(self.genome[x, y], math.fabs(self.genome[x, y]))
+
+        # random.gauss(mean, sigma)
+        self.genome[x, y] = random.gauss(self.genome[x, y], math.fabs(self.genome[x, y] * s ))
 
         # # This will mutate ALL genes
         # for i in range(0, len(self.genome)):
         #     self.genome[i] = random.gauss(self.genome[i], math.fabs(self.genome[i]))
 
+        # Clip the value of
+        self.genome[x, y] = np.clip(self.genome[x, y], -1, 1)
+        #self.genome[x, y] = max(min(1, self.genome[x, y]), -1)
+
     def Print( self ):
 
-        print( '[', self.ID, self.fitness, ']', end=" " )
+        print( '[', self.ID, self.fitness, self.stability, ']', end=" " )
         #print(self.fitness, end=" "),
         #print(self.genome)
 
-    def Start_Evaluation( self , environment , hideSim=True , startPaused=False ):
+    def Start_Evaluation( self, environment, hideSim=True, startPaused=False ):
 
         self.sim = PYROSIM( playPaused=startPaused, playBlind=hideSim,
                             evalTime=c.evaluationTime )
@@ -82,8 +70,16 @@ class INDIVIDUAL:
         # the returned value is the inverse squared of the distance to light source
         distLight = self.sim.Get_Sensor_Data( sensorID=4, s=0 )
 
-        if printFit:
-            print(distLight[-1])
+        # Touch Sensor Values.... Comes in vector
+        for t in range (0, 4):
 
-        self.fitness += math.log1p( distLight[-1] )
+            self.stability += sum(self.sim.Get_Sensor_Data( sensorID=t )) / 4
+
+        # DEBUGGING #
+        if printFit:
+            print(distLight[-1] ** (1/4), end=', ')
+
+        # Fitness Computation
+        self.fitness += distLight[-1] ** (1/4)
+
         del self.sim
