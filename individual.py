@@ -15,8 +15,12 @@ class INDIVIDUAL:
     def __init__( self, i ):
 
         self.ID = i
-        self.genome = MatrixCreate(5, 8)
-        self.genome = MatrixRandomize(self.genome, 1, -1)
+
+        # genome[0] = Hidden <-> Sensor Neurons
+        # genome[1] = Hidden <-> Motor Neurons
+        self.genome = [MatrixCreate(3, 5), MatrixCreate(3,8)]
+        self.genome[0] = MatrixRandomize(self.genome[0], 1, -1)
+        self.genome[1] = MatrixRandomize(self.genome[1], 1, -1)
         self.fitness = 0
         self.stability = 0
 
@@ -29,18 +33,19 @@ class INDIVIDUAL:
 
         # This will choose a random gene to mutate. but this is based on a Gauss distribution. This has been edited to
         # accept 2 dimensional genes
-        x = random.randint(0, len(self.genome) - 1 )
-        y = random.randint(0, len(self.genome[0]) - 1 )
+        z = random.randint(0, len(self.genome) - 1)
+        x = random.randint(0, len(self.genome[z]) - 1 )
+        y = random.randint(0, len(self.genome[z][x]) - 1 )
 
         # random.gauss(mean, sigma)
-        self.genome[x, y] = random.gauss(self.genome[x, y], math.fabs(self.genome[x, y] * s ))
+        self.genome[z][x, y] = random.gauss(self.genome[z][x,y], math.fabs(self.genome[z][x,y] * s ))
 
         # # This will mutate ALL genes
         # for i in range(0, len(self.genome)):
         #     self.genome[i] = random.gauss(self.genome[i], math.fabs(self.genome[i]))
 
         # Clip the value of
-        self.genome[x, y] = np.clip(self.genome[x, y], -1, 1)
+        self.genome[z][x, y] = np.clip(self.genome[z][x,y], -1, 1)
         #self.genome[x, y] = max(min(1, self.genome[x, y]), -1)
 
     def Print( self ):
@@ -78,6 +83,8 @@ class INDIVIDUAL:
         # DEBUGGING #
         if printFit:
             print(distLight[-1] ** (1/4), end=', ')
+
+        print()
 
         # Fitness Computation
         self.fitness += distLight[-1] ** (1/4)

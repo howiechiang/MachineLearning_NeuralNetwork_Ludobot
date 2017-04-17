@@ -26,5 +26,5 @@ tau = 0.3
 ###### Logistics of Children Generation ######
 perElitist = .1          # elitist percentage
 perCrossOver = .01        # percent chance to breed
-perRapture = .01      # percent chance to reset population
+perRapture = .05      # percent chance to reset population
 sMutation = 0.3          # sigma of mutation

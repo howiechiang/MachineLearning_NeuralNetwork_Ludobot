@@ -102,16 +102,19 @@ class POPULATION:
 
         for i in range(len(self.p), self.popSize):
 
-            if random.random() < crossOverChance:
+            # if random.random() < crossOverChance:
+            #
+            #     #self.p[i] = cp.deepcopy(self.Breed(other))
+            #     #self.p[i].Mutate()
+            #     self.p[i] = cp.deepcopy(other.p[i])
+            #     print("CrossOver")
+            #     return
+            #
+            # else:
 
-                self.p[i] = cp.deepcopy(self.Breed(other))
-                self.p[i].Mutate()
-
-            else:
-
-                winner = self.Winner_Of_Tournament_Selection(other)
-                self.p[i] = cp.deepcopy(winner)
-                self.p[i].Mutate()
+            winner = self.Winner_Of_Tournament_Selection(other)
+            self.p[i] = cp.deepcopy(winner)
+            self.p[i].Mutate()
 
             # if i//2 == 0:
             #
@@ -151,6 +154,7 @@ class POPULATION:
 
         for i in range( len(self.p), self.popSize ):
 
+            self.p[i] = 0
             self.p[i] = INDIVIDUAL(i)
 
     def Breed(self, other):

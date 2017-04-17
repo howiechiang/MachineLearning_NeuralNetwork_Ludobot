@@ -140,15 +140,29 @@ class ROBOT:
 
         for m in range(0, 8):
 
-            sim.Send_Motor_Neuron( neuronID=5 + m, jointID=m, tau=0.3) # Tau means the rate of response
+            sim.Send_Motor_Neuron( neuronID=5 + m, jointID=m, tau=c.tau ) # Tau means the rate of response
+
+        for h in range(0, 3):
+
+            sim.Send_Hidden_Neuron( neuronID=13 + h )
 
     def Send_Synapses(self, sim, wts):
 
-        for s in range(0, 5):       # Sensor Neurons
+        # for s in range(0, 5):       # Sensor Neurons
+        #
+        #     for m in range(0, 8):   # Motor Neurons
+        #
+        #         sim.Send_Synapse(sourceNeuronID=s, targetNeuronID=5 + m, weight=wts[s, m])
 
-            for m in range(0, 8):   # Motor Neurons
+        for h in range(0,3):
 
-                sim.Send_Synapse(sourceNeuronID=s, targetNeuronID=5 + m, weight=wts[s, m])
+            for s in range(0, 5):
+
+                sim.Send_Synapse( sourceNeuronID=s, targetNeuronID=13 + h, weight=wts[0][h, s] )
+
+            for m in range(0, 8):
+
+                sim.Send_Synapse(sourceNeuronID=13 + h, targetNeuronID=m, weight=wts[1][h, m])
 
     def Debug_Tester(self, sim):
 
