@@ -129,8 +129,8 @@ class ROBOT:
         sim.Send_Touch_Sensor( sensorID=1, objectID=6 )
         sim.Send_Touch_Sensor( sensorID=2, objectID=7 )
         sim.Send_Touch_Sensor( sensorID=3, objectID=8 )
-        #sim.Send_Position_Sensor( sensorID=4, objectID=0 )
         sim.Send_Light_Sensor( sensorID=4, objectID=0 )
+        sim.Send_Position_Sensor( sensorID=5, objectID=0 )
 
     def Send_Neurons(self, sim):
 
@@ -163,6 +163,10 @@ class ROBOT:
             for m in range(0, 8):
 
                 sim.Send_Synapse(sourceNeuronID=13 + h, targetNeuronID=m, weight=wts[1][h, m])
+
+            for r in range(0,3):
+
+                sim.Send_Synapse(sourceNeuronID=13 + h, targetNeuronID=13 + r, weight=wts[2][h, r])
 
     def Debug_Tester(self, sim):
 

@@ -54,17 +54,19 @@ for g in range(0, c.numGens):
     # Rapture chance
     if random.random() < c.perRapture:
 
-        children.Rapture()
         print('Rapture')
+        children.Rapture()
+        children.Evaluate(envs, hideSim=True, startPaused=False, printFit=False)
+        parents = cp.deepcopy(children)
 
     else:
 
         # Simple collection evaluation
         children.Collect_Children_From(parents, c.perCrossOver)
 
-    # Evaluate Children and replace parents
-    children.Evaluate( envs, hideSim=True, startPaused=False , printFit=False )
-    parents.ReplaceWith( children )
+        # Evaluate Children and replace parents
+        children.Evaluate( envs, hideSim=True, startPaused=False , printFit=False )
+        parents.ReplaceWith( children )
 
     # Debugging
     fits.append(parents.p[0].fitness)

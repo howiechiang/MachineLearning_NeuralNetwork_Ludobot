@@ -37,6 +37,8 @@ class POPULATION:
                 self.p[i].Compute_Fitness(printFit)
 
             if printFit:
+
+                print(self.p[i].fitness)
                 print()
 
     def Mutate( self ):
@@ -154,7 +156,6 @@ class POPULATION:
 
         for i in range( len(self.p), self.popSize ):
 
-            self.p[i] = 0
             self.p[i] = INDIVIDUAL(i)
 
     def Breed(self, other):

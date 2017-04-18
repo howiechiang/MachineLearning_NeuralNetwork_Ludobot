@@ -18,9 +18,12 @@ class INDIVIDUAL:
 
         # genome[0] = Hidden <-> Sensor Neurons
         # genome[1] = Hidden <-> Motor Neurons
-        self.genome = [MatrixCreate(3, 5), MatrixCreate(3,8)]
+        # genome[2] = Hidden <-> Hidden Recurrent Neurons
+        self.genome = [MatrixCreate(3, 5), MatrixCreate(3,8), MatrixCreate(3, 3)]
+        self.tarGenome = cp.deepcopy(self.genome)
         self.genome[0] = MatrixRandomize(self.genome[0], 1, -1)
         self.genome[1] = MatrixRandomize(self.genome[1], 1, -1)
+        self.genome[2] = MatrixRandomize(self.genome[2], 1, -1)
         self.fitness = 0
         self.stability = 0
 
@@ -33,20 +36,23 @@ class INDIVIDUAL:
 
         # This will choose a random gene to mutate. but this is based on a Gauss distribution. This has been edited to
         # accept 2 dimensional genes
-        z = random.randint(0, len(self.genome) - 1)
-        x = random.randint(0, len(self.genome[z]) - 1 )
-        y = random.randint(0, len(self.genome[z][x]) - 1 )
 
-        # random.gauss(mean, sigma)
-        self.genome[z][x, y] = random.gauss(self.genome[z][x,y], math.fabs(self.genome[z][x,y] * s ))
+        for i in range(0,2):
 
-        # # This will mutate ALL genes
-        # for i in range(0, len(self.genome)):
-        #     self.genome[i] = random.gauss(self.genome[i], math.fabs(self.genome[i]))
+            z = random.randint(0, len(self.genome) - 1)
+            x = random.randint(0, len(self.genome[z]) - 1 )
+            y = random.randint(0, len(self.genome[z][x]) - 1 )
 
-        # Clip the value of
-        self.genome[z][x, y] = np.clip(self.genome[z][x,y], -1, 1)
-        #self.genome[x, y] = max(min(1, self.genome[x, y]), -1)
+            # random.gauss(mean, sigma)
+            self.genome[z][x,y] = random.gauss(self.genome[z][x,y], math.fabs(self.genome[z][x,y] * s ))
+
+            # # This will mutate ALL genes
+            # for i in range(0, len(self.genome)):
+            #     self.genome[i] = random.gauss(self.genome[i], math.fabs(self.genome[i]))
+
+            # Clip the value of Gene
+            self.genome[z][x,y] = np.clip(self.genome[z][x,y], -1, 1)
+            #self.genome[x, y] = max(min(1, self.genome[x, y]), -1)
 
     def Print( self ):
 
@@ -74,19 +80,24 @@ class INDIVIDUAL:
 
         # the returned value is the inverse squared of the distance to light source
         distLight = self.sim.Get_Sensor_Data( sensorID=4, s=0 )
+        distX = self.sim.Get_Sensor_Data( sensorID=5, s=0 )
+        distY = self.sim.Get_Sensor_Data(sensorID=5, s=1)
 
         # Touch Sensor Values.... Comes in vector
         for t in range (0, 4):
 
-            self.stability += sum(self.sim.Get_Sensor_Data( sensorID=t )) / 4
+            self.stability += sum(self.sim.Get_Sensor_Data( sensorID=t )) * 0.25
 
         # DEBUGGING #
         if printFit:
-            print(distLight[-1] ** (1/4), end=', ')
 
-        print()
+            plt.plot(distLight ** 0.25)
+            plt.show()
 
         # Fitness Computation
-        self.fitness += distLight[-1] ** (1/4)
+        self.fitness += distLight[-1] ** 0.25
+        # self.fitness += np.clip(distLight[-1], 0, 0.1)
+
+
 
         del self.sim

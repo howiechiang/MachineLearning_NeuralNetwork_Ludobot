@@ -4,7 +4,7 @@
 
 
 ###### Constants for Simulation ######
-evaluationTime = 1000
+evaluationTime = 4000
 
 
 ###### Constants for Robot ######
@@ -18,7 +18,7 @@ pi = 3.14256
 
 ###### Evolution Constants ######
 popSize = 10
-numGens = 50
+numGens = 100
 numEnvs = 4
 tau = 0.3
 
