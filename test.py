@@ -1,14 +1,16 @@
-from core01_HillClimber import *
-import numpy as np
+from geodude import GEODUDE
+from pyrosim import PYROSIM
+import constants as c
 
 
-a = MatrixCreate(5, 5)
-a = MatrixRandomize(a, -1, 1)
-b = MatrixCreate(5, 5)
-b = MatrixRandomize(b)
 
-print(a)
-print(b)
-print(a * b + np.logical_not(b))
 
-#print(1.0*np.array(np.logical_not(b)))
+
+
+sim = PYROSIM( playPaused=True, playBlind=False, evalTime=10000)
+geodude1 = GEODUDE(sim)
+sim.Start()
+sim.Wait_To_Finish()
+
+# touch = sim.Get_Sensor_Data(sensorID=0)
+# print(touch)
