@@ -78,50 +78,50 @@ class ROBOT:
         ####### Legs to Body ######
         sim.Send_Joint(jointID=0,
                        firstObjectID=0, secondObjectID=1,
-                       x=0, y=c.L, z=c.L + c.R,
+                       x=0, y=c.H, z=c.L + c.R,
                        n1=-1, n2=0, n3=0,
                        lo=-pi / 2, hi=pi / 2)
 
         sim.Send_Joint(jointID=1,
                        firstObjectID=0, secondObjectID=2,
-                       x=c.L, y=0, z=c.L + c.R,
+                       x=c.H, y=0, z=c.L + c.R,
                        n1=0, n2=-1, n3=0,
                        lo=-pi / 2, hi=pi /2)
 
         sim.Send_Joint(jointID=2,
                        firstObjectID=0, secondObjectID=3,
-                       x=0, y=-c.L, z=c.L + c.R,
+                       x=0, y=-c.H, z=c.L + c.R,
                        n1=1, n2=0, n3=0,
                        lo=-pi / 2, hi=pi / 2)
 
         sim.Send_Joint(jointID=3,
                        firstObjectID=0, secondObjectID=4,
-                       x=-c.L, y=0, z=c.L + c.R,
+                       x=-c.H, y=0, z=c.L + c.R,
                        n1=0, n2=1, n3=0,
                        lo=-pi / 2, hi=pi / 2)
 
-        ####### Legs to Body ######
+        ####### Legs to Leg ######
         sim.Send_Joint(jointID=4,
                        firstObjectID=1, secondObjectID=5,
-                       x=0, y= 2 * c.L, z=c.L + c.R,
+                       x=0, y= c.H + c.L, z=c.L + c.R,
                        n1=-1, n2=0, n3=0,
                        lo=-pi / 2, hi=pi / 2)
 
         sim.Send_Joint(jointID=5,
                        firstObjectID=2, secondObjectID=6,
-                       x= 2 * c.L, y=0, z=c.L + c.R,
+                       x= c.H + c.L, y=0, z=c.L + c.R,
                        n1=0, n2=-1, n3=0,
                        lo=-pi / 2, hi=pi / 2)
 
         sim.Send_Joint(jointID=6,
                        firstObjectID=3, secondObjectID=7,
-                       x=0, y= -2 * c.L, z=c.L + c.R,
+                       x=0, y= -(c.H + c.L), z=c.L + c.R,
                        n1=1, n2=0, n3=0,
                        lo=-pi / 2, hi=pi / 2)
 
         sim.Send_Joint(jointID=7,
                        firstObjectID=4, secondObjectID=8,
-                       x= -2 * c.L, y=0, z=c.L + c.R,
+                       x= -(c.H + c.L), y=0, z=c.L + c.R,
                        n1=0, n2=1, n3=0,
                        lo=-pi / 2, hi=pi / 2)
 

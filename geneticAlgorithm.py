@@ -14,6 +14,7 @@ import sys
 import pickle
 import random
 import os.path
+import time
 
 ########################################################################################################################
 # Script
@@ -21,6 +22,7 @@ import os.path
 
 ###### Variables ######
 pickledPop = "robot.p"
+loadPrecursor = False
 #cSurv = int(c.popSize * c.perElitist)
 cSurv = int(c.perElitist * c.popSize)
 
@@ -33,7 +35,7 @@ parents = POPULATION( c.popSize )
 parents.Initialize()
 
 ###### Load Precursor into Population ######
-if os.path.isfile(pickledPop):
+if os.path.isfile(pickledPop) and loadPrecursor:
 
     f = open(pickledPop, "rb")
     parents.Copy_Best_From(pickle.load(f), cSurv)
@@ -78,16 +80,23 @@ for g in range(0, c.numGens):
 for e in envs.envs:
 
     parents.p[0].Start_Evaluation( envs.envs[e], hideSim=False, startPaused=True )
-    parents.p[0].fitness = 0
-    parents.p[0].Compute_Fitness( printFit=True )
+    parents.p[0].sim.Wait_To_Finish()
+
+
+# for i in parents.p:
+#
+#     parents.p[i].Start_Evaluation( envs.envs[0], hideSim=False, startPaused=False)
+#     #parents.p[i].sim.Wait_To_Finish()
+
 
 ###### This pickles the best configuration ######
-for i in parents.p:
-    parents.p[i].ID = 0
-
-f = open("robot.p", "wb")
-pickle.dump(parents, f)
-f.close()
+# print('The parents will be pickled...')
+# for i in parents.p:
+#     parents.p[i].ID = 0
+#
+# f = open("robot.p", "wb")
+# pickle.dump(parents, f)
+# f.close()
 
 
 ###### Data Visualization ######
