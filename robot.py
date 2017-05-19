@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 from pyrosim import PYROSIM
 import constants as c
 
+import random
+
 ###### Variables ######
 pi = c.pi
 
@@ -12,9 +14,9 @@ class ROBOT:
 
         self.Send_Object(sim)
         self.Send_Joints(sim)
-        self.Send_Sensors(sim)
-        self.Send_Neurons(sim)
-        self.Send_Synapses(sim, wts)
+        #self.Send_Sensors(sim)
+        #self.Send_Neurons(sim)
+        #self.Send_Synapses(sim, wts)
         #self.Debug_Tester(sim)
 
     def Send_Object(self, sim):
@@ -158,15 +160,18 @@ class ROBOT:
 
             for s in range(0, 5):       # Sensors to hidden layer
 
-                sim.Send_Synapse( sourceNeuronID=s, targetNeuronID=13 + h, weight=wts[0][h, s] )
+                bias = random.uniform( c.biasSensor, -c.biasSensor )
+                sim.Send_Synapse(sourceNeuronID=s, targetNeuronID=13 + h, weight=wts[0][h, s] + bias)
 
             for m in range(0, 8):       # hidden layer to motors
 
-                sim.Send_Synapse(sourceNeuronID=13 + h, targetNeuronID=m, weight=wts[1][h, m])
+                bias = random.uniform( c.biasMotor, -c.biasMotor )
+                sim.Send_Synapse(sourceNeuronID=13 + h, targetNeuronID=m, weight=wts[1][h, m] + bias)
 
             for r in range(0,c.numHidNeurons):        # hidden layer (recurrent)
 
-                sim.Send_Synapse(sourceNeuronID=13 + h, targetNeuronID=13 + r, weight=wts[2][h, r])
+                bias = random.uniform( c.biasNeuron, c.biasNeuron )
+                sim.Send_Synapse(sourceNeuronID=13 + h, targetNeuronID=13 + r, weight=wts[2][h, r] + bias )
 
     def Debug_Tester(self, sim):
 
